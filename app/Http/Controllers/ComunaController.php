@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comuna;
+
 use App\Models\Pais;
-use App\Models\Departamento;
+use App\Models\Departamento; 
+use App\Http\Controllers\Controller;
+use App\Models\Comuna;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 class ComunaController extends Controller
 {
@@ -17,16 +20,16 @@ class ComunaController extends Controller
      */
     public function index()
     {
-        $comunas = Comuna::all();
-        // $comunas = DB::table('tb_comuna')
-        //     ->join('tb_municipio', 'tb_comuna.muni_codi', '=', 'tb_municipio.muni_codi')
-        //     ->join('tb_departamento', 'tb_municipio.depa_codi', '=', 'tb_departamento.depa_codi')
-        //     ->select('tb_comuna.*', 'tb_municipio.muni_nomb')
-        //     ->get();
+        //$comunas = Comuna::all();
+        $comunas = DB::table('tb_comuna')
+          ->join('tb_municipio', 'tb_comuna.muni_codi', '=', 'tb_municipio.muni_codi')
+            //->join('tb_departamento', 'tb_municipio.depa_codi', '=', 'tb_departamento.depa_codi')
+            ->select('tb_comuna.*', 'tb_municipio.muni_nomb')
+            ->get();
 
         //dd($comunas);
 
-        return view("comunas.index", ["comunas" => $comunas]);
+        return json_encode(['comunas'=>$comunas]);
     }
 
     /**
@@ -119,7 +122,7 @@ class ComunaController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     *  
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -135,4 +138,5 @@ class ComunaController extends Controller
 
         return redirect()->route('comunas.index')->with('success', 'Comuna eliminada exitosamente.');
     }
+    
 }
